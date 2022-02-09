@@ -14,7 +14,6 @@ jobs:
       contents: read
     env:
       DEPLOY_API_ENDPOINT: https://8082-103-80-117-113.ngrok.io
-      ACTIONS_STEP_DEBUG: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
