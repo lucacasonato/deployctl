@@ -12,7 +12,7 @@ async function main() {
   const aud = new URL(`/projects/${project}`, ORIGIN);
   const token = await core.getIDToken(aud);
 
-  const api = new API(token);
+  const api = new API(`GitHubOIDC ${token}`);
   core.debug("Fetching project");
   const project = await api.getProject(projectId);
   if (project === null) {
