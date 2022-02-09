@@ -106,7 +106,7 @@ interface DeployOpts {
 
 async function deploy(opts: DeployOpts): Promise<void> {
   const projectSpinner = wait("Fetching project information...").start();
-  const api = new API(opts.token);
+  const api = API.fromToken(opts.token);
   const project = await api.getProject(opts.project);
   if (project === null) {
     projectSpinner.fail("Project not found.");

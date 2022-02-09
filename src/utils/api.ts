@@ -24,12 +24,17 @@ export class APIError extends Error {
 
 export class API {
   #endpoint: string;
-  #token: string;
+  #authorization: string;
 
-  constructor(token: string) {
-    this.#endpoint = Deno.env.get("DEPLOY_API_ENDPOINT") ??
+  constructor(authorization: string, endpoint: string) {
+    this.#authorization = authorization;
+    this.#endpoint = endpoint;
+  }
+
+  static fromToken(token: string) {
+    const endpoint = Deno.env.get("DEPLOY_API_ENDPOINT") ??
       "https://dash.deno.com";
-    this.#token = token;
+    return new API(`Bearer ${token}`, endpoint);
   }
 
   async #request(path: string, opts: RequestOptions = {}): Promise<Response> {
@@ -40,7 +45,7 @@ export class API {
       : undefined;
     const headers = {
       "Accept": "application/json",
-      "Authorization": `Bearer ${this.#token}`,
+      "Authorization": this.#authorization,
       ...(opts.body !== undefined
         ? opts.body instanceof FormData
           ? {}
