@@ -38,8 +38,9 @@ async function main() {
   if (token === null) {
     core.setOutput("deployment-id", "");
     core.setOutput("url", "");
-    core.info(
-      "Skipping creation of deployment because no OIDC token is available. Deployments from forks are currently not supported.",
+    core.notice(
+      "Deployments from forks are currently not supported by Deno Deploy.",
+      { title: "Skipped deployment on fork" },
     );
     return;
   }
