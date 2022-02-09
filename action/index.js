@@ -58,7 +58,7 @@ async function main() {
   const { manifest } = entries;
   const req = {
     url: url.href,
-    prod: false,
+    production: false,
     manifest,
   };
   const progress = api.pushDeploy(projectId, req, files);
