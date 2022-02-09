@@ -1,6 +1,7 @@
 import { LineStream } from "https://deno.land/std@0.116.0/streams/delimiter.ts";
 import {
   DeploymentProgress,
+  GitHubActionsDeploymentRequest,
   ManifestEntry,
   Project,
   PushDeploymentRequest,
@@ -122,6 +123,22 @@ export class API {
     }
     return this.#requestStream(
       `/projects/${projectId}/deployment_with_assets`,
+      { method: "POST", body: form },
+    );
+  }
+
+  gitHubActionsDeploy(
+    projectId: string,
+    request: GitHubActionsDeploymentRequest,
+    files: Uint8Array[],
+  ): AsyncIterable<DeploymentProgress> {
+    const form = new FormData();
+    form.append("request", JSON.stringify(request));
+    for (const bytes of files) {
+      form.append("file", new Blob([bytes]));
+    }
+    return this.#requestStream(
+      `/projects/${projectId}/deployment_github_actions`,
       { method: "POST", body: form },
     );
   }

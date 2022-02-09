@@ -2552,6 +2552,19 @@ class API {
             body: form
         });
     }
+    gitHubActionsDeploy(projectId, request, files) {
+        const form = new FormData();
+        form.append("request", JSON.stringify(request));
+        for (const bytes of files){
+            form.append("file", new Blob([
+                bytes
+            ]));
+        }
+        return this.#requestStream(`/projects/${projectId}/deployment_github_actions`, {
+            method: "POST",
+            body: form
+        });
+    }
 }
 async function calculateGitSha1(bytes) {
     const prefix = `blob ${bytes.byteLength}\0`;
