@@ -61,7 +61,6 @@ async function main() {
  
   const req = {
     url: url.href,
-    production: false,
     manifest,
     event: github.context.payload,
   };
