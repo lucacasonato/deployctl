@@ -3,6 +3,7 @@ import { Deno } from "@deno/shim-deno";
 import { TransformStream } from "stream/web";
 import { FormData, formDataToBlob } from "formdata-polyfill/esm.min.js";
 import { Blob } from "buffer";
+import { webcrypto } from "crypto";
 
 async function fetch(url, init) {
   if (init.body instanceof FormData) {
@@ -16,3 +17,4 @@ globalThis.Deno = Deno;
 globalThis.TransformStream = TransformStream;
 globalThis.FormData = FormData;
 globalThis.Blob = Blob;
+globalThis.crypto = webcrypto;
