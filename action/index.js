@@ -12,9 +12,7 @@ async function main() {
   const cwd = resolve(process.cwd(), core.getInput("cwd", {}));
 
   const aud = new URL(`/projects/${projectId}`, ORIGIN);
-  const token = await core.getIDToken(aud);
-
-  const api = new API(`GitHubOIDC ${token}`, ORIGIN);
+  const token = await core.getIDToken(aud).catch(() => null);
 
   core.info(`Project: ${projectId}`);
 
@@ -37,6 +35,17 @@ async function main() {
   });
   core.debug(`Discovered ${assets.size} assets`);
 
+  if (token === null) {
+    core.setOutput("deployment-id", "");
+    core.setOutput("url", "");
+    core.info(
+      "Skipping creation of deployment because no OIDC token is available. Deployments from forks are currently not supported.",
+    );
+    return;
+  }
+
+  const api = new API(`GitHubOIDC ${token}`, ORIGIN);
+
   const neededHashes = await api.projectNegotiateAssets(projectId, {
     entries,
   });
@@ -58,7 +67,7 @@ async function main() {
 
   const manifest = { entries };
   core.debug(`Manifest: ${JSON.stringify(manifest, null, 2)}`);
- 
+
   const req = {
     url: url.href,
     manifest,
