@@ -20,6 +20,6 @@ jobs:
       - name: Deploy to Deno Deploy
         uses: ./
         with:
-          project: strong-parrot-19
+          project: happy-rat-64
           cwd: examples
           entrypoint: hello.ts
