@@ -39,8 +39,10 @@ async function main() {
     core.setOutput("deployment-id", "");
     core.setOutput("url", "");
     core.notice(
-      "Deployments from forks are currently not supported by Deno Deploy.",
-      { title: "Skipped deployment on fork" },
+      "Deployments from forks are currently not supported by Deno Deploy. The deployment was skipped.",
+      {
+        title: "Skipped deployment on fork",
+      },
     );
     return;
   }
