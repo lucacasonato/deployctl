@@ -56,7 +56,7 @@ export interface PushDeploymentRequest {
 export interface GitHubActionsDeploymentRequest {
   url: string;
   manifest: { entries: Record<string, ManifestEntry> };
-  event?: any;
+  event?: unknown;
 }
 
 export type DeploymentProgress =

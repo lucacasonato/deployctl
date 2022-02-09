@@ -4,7 +4,10 @@ import { resolve, toFileUrl } from "../../deps.ts";
  * Parses the entrypoint to a URL.
  * Ensures the file exists when the entrypoint is a local file.
  */
-export async function parseEntrypoint(entrypoint: string, cwd?: string): Promise<URL> {
+export async function parseEntrypoint(
+  entrypoint: string,
+  cwd?: string,
+): Promise<URL> {
   let entrypointSpecifier: URL;
   try {
     if (

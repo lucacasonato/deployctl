@@ -2,10 +2,10 @@ import { fetch as realfetch } from "undici";
 import { Deno } from "@deno/shim-deno";
 import { TransformStream } from "stream/web";
 import { FormData, formDataToBlob } from "formdata-polyfill/esm.min.js";
-import Blob from 'fetch-blob'
+import Blob from "fetch-blob";
 import { webcrypto } from "crypto";
 
-async function fetch(url, init) {
+function fetch(url, init) {
   if (init.body instanceof FormData) {
     init.body = formDataToBlob(init.body, Blob);
   }
