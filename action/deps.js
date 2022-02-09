@@ -2469,10 +2469,14 @@ class APIError extends Error {
 }
 class API {
     #endpoint;
-    #token;
-    constructor(token){
-        this.#endpoint = Deno.env.get("DEPLOY_API_ENDPOINT") ?? "https://dash.deno.com";
-        this.#token = token;
+    #authorization;
+    constructor(authorization, endpoint){
+        this.#authorization = authorization;
+        this.#endpoint = endpoint;
+    }
+    static fromToken(token) {
+        const endpoint = Deno.env.get("DEPLOY_API_ENDPOINT") ?? "https://dash.deno.com";
+        return new API(`Bearer ${token}`, endpoint);
     }
     async #request(path25, opts = {}) {
         const url = `${this.#endpoint}/api${path25}`;
@@ -2480,7 +2484,7 @@ class API {
         const body = opts.body !== undefined ? opts.body instanceof FormData ? opts.body : JSON.stringify(opts.body) : undefined;
         const headers = {
             "Accept": "application/json",
-            "Authorization": `Bearer ${this.#token}`,
+            "Authorization": this.#authorization,
             ...opts.body !== undefined ? opts.body instanceof FormData ? {} : {
                 "Content-Type": "application/json"
             } : {}
@@ -2611,4 +2615,5 @@ async function walk(cwd, dir, files, options) {
 export { parseEntrypoint as parseEntrypoint };
 export { API as API, APIError as APIError };
 export { walk as walk };
+export { fromFileUrl2 as fromFileUrl };
 

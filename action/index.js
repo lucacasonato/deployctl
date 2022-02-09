@@ -1,6 +1,6 @@
 import * as core from "@actions/core";
 import "./shim.js";
-import { API, parseEntrypoint, walk } from "./deps.js";
+import { API, parseEntrypoint, walk, fromFileUrl } from "./deps.js";
 
 // The origin of the server to make Deploy requests to.
 const ORIGIN = process.env.DEPLOY_API_ENDPOINT ?? "https://dash.deno.com";
@@ -8,21 +8,16 @@ const ORIGIN = process.env.DEPLOY_API_ENDPOINT ?? "https://dash.deno.com";
 async function main() {
   const projectId = core.getInput("project", { required: true });
   const entrypoint = core.getInput("entrypoint", { required: true });
+  const cwd = core.getInput("cwd", {}) || process.cwd();
 
-  const aud = new URL(`/projects/${project}`, ORIGIN);
+  const aud = new URL(`/projects/${projectId}`, ORIGIN);
   const token = await core.getIDToken(aud);
 
   const api = new API(`GitHubOIDC ${token}`);
-  core.debug("Fetching project");
-  const project = await api.getProject(projectId);
-  if (project === null) {
-    throw "Project not found.";
-  }
 
-  core.info(`Project: ${project.name}`);
+  core.info(`Project: ${projectId}`);
 
   let url = await parseEntrypoint(entrypoint);
-  const cwd = process.cwd();
   if (url.protocol === "file:") {
     const path = fromFileUrl(url);
     if (!path.startsWith(cwd)) {
@@ -36,12 +31,12 @@ async function main() {
   core.debug(`Discovering assets in "${cwd}"`);
   const assets = new Map();
   const entries = await walk(cwd, cwd, assets, {
-    include: opts.include,
-    exclude: opts.exclude,
+    include: undefined,
+    exclude: undefined,
   });
   core.debug(`Discovered ${assets.size} assets`);
 
-  const neededHashes = await api.projectNegotiateAssets(project.id, {
+  const neededHashes = await api.projectNegotiateAssets(projectId, {
     entries,
   });
   core.debug(`Determined ${neededHashes.length} need to be uploaded`);
@@ -65,7 +60,7 @@ async function main() {
     prod: false,
     manifest,
   };
-  const progress = api.pushDeploy(project.id, req, files);
+  const progress = api.pushDeploy(projectId, req, files);
   let deployment;
   for await (const event of progress) {
     switch (event.type) {

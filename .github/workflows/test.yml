@@ -1,0 +1,25 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      DEPLOY_API_ENDPOINT: https://8082-103-80-117-113.ngrok.io
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Deploy to Deno Deploy
+        uses: ./
+        with:
+          project: strong-parrot-19
+          cwd: examples
+          entrypoint: hello.ts
