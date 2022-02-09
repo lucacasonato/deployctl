@@ -55,6 +55,7 @@ async function main() {
     `Uploading ${neededHashes.length} file(s) (total ${totalSize} bytes)`,
   );
 
+  const { manifest } = entries;
   const req = {
     url: url.href,
     prod: false,
