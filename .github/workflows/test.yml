@@ -22,4 +22,4 @@ jobs:
         with:
           project: strong-parrot-19
           cwd: examples
-          entrypoint: examples/hello.ts
+          entrypoint: hello.ts

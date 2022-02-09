@@ -2439,13 +2439,13 @@ new TextEncoder();
     white: mod2.white,
     gray: mod2.gray
 });
-async function parseEntrypoint(entrypoint) {
+async function parseEntrypoint(entrypoint, cwd) {
     let entrypointSpecifier;
     try {
         if (entrypoint.startsWith("https://") || entrypoint.startsWith("http://") || entrypoint.startsWith("file://")) {
             entrypointSpecifier = new URL(entrypoint);
         } else {
-            entrypointSpecifier = toFileUrl2(resolve2(Deno.cwd(), entrypoint));
+            entrypointSpecifier = toFileUrl2(resolve2(cwd ?? Deno.cwd(), entrypoint));
         }
     } catch (err) {
         throw `Failed to parse entrypoint specifier '${entrypoint}': ${err.message}`;
@@ -2615,5 +2615,5 @@ async function walk(cwd, dir, files, options) {
 export { parseEntrypoint as parseEntrypoint };
 export { API as API, APIError as APIError };
 export { walk as walk };
-export { fromFileUrl2 as fromFileUrl };
+export { fromFileUrl2 as fromFileUrl, resolve2 as resolve };
 

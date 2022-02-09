@@ -4,7 +4,7 @@ import { resolve, toFileUrl } from "../../deps.ts";
  * Parses the entrypoint to a URL.
  * Ensures the file exists when the entrypoint is a local file.
  */
-export async function parseEntrypoint(entrypoint: string): Promise<URL> {
+export async function parseEntrypoint(entrypoint: string, cwd?: string): Promise<URL> {
   let entrypointSpecifier: URL;
   try {
     if (
@@ -13,7 +13,7 @@ export async function parseEntrypoint(entrypoint: string): Promise<URL> {
     ) {
       entrypointSpecifier = new URL(entrypoint);
     } else {
-      entrypointSpecifier = toFileUrl(resolve(Deno.cwd(), entrypoint));
+      entrypointSpecifier = toFileUrl(resolve(cwd ?? Deno.cwd(), entrypoint));
     }
   } catch (err) {
     throw `Failed to parse entrypoint specifier '${entrypoint}': ${err.message}`;

@@ -1,6 +1,6 @@
 import * as core from "@actions/core";
 import "./shim.js";
-import { API, parseEntrypoint, walk, fromFileUrl } from "./deps.js";
+import { API, fromFileUrl, parseEntrypoint, walk, resolve } from "./deps.js";
 
 // The origin of the server to make Deploy requests to.
 const ORIGIN = process.env.DEPLOY_API_ENDPOINT ?? "https://dash.deno.com";
@@ -8,7 +8,7 @@ const ORIGIN = process.env.DEPLOY_API_ENDPOINT ?? "https://dash.deno.com";
 async function main() {
   const projectId = core.getInput("project", { required: true });
   const entrypoint = core.getInput("entrypoint", { required: true });
-  const cwd = core.getInput("cwd", {}) || process.cwd();
+  const cwd = resolve(process.cwd(), core.getInput("cwd", {}));;
 
   const aud = new URL(`/projects/${projectId}`, ORIGIN);
   const token = await core.getIDToken(aud);
@@ -17,7 +17,7 @@ async function main() {
 
   core.info(`Project: ${projectId}`);
 
-  let url = await parseEntrypoint(entrypoint);
+  let url = await parseEntrypoint(entrypoint, cwd);
   if (url.protocol === "file:") {
     const path = fromFileUrl(url);
     if (!path.startsWith(cwd)) {
