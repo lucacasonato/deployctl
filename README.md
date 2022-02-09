@@ -1,6 +1,7 @@
 # deployctl
 
-Command line tool for Deno Deploy.
+`deployctl` is the command line tool for Deno Deploy. This repository also
+contains the `denoland/deployctl` GitHub Action.
 
 ## Install
 
