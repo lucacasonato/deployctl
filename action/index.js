@@ -56,9 +56,9 @@ async function main() {
     `Uploading ${neededHashes.length} file(s) (total ${totalSize} bytes)`,
   );
 
-  core.debug(JSON.stringify(entries, null, 2));
-
   const manifest = { entries };
+  core.debug(`Manifest: ${JSON.stringify(manifest, null, 2)}`);
+ 
   const req = {
     url: url.href,
     production: false,
