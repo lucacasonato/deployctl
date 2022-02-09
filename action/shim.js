@@ -1,7 +1,7 @@
 import { fetch as realfetch } from "undici";
 import { Deno } from "@deno/shim-deno";
 import { TransformStream } from "stream/web";
-import { FormData, formDataToBlob } from "formdata-polyfill";
+import { FormData, formDataToBlob } from "formdata-polyfill/esm.min.js";
 import { Blob } from "buffer";
 
 async function fetch(url, init) {
