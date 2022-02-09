@@ -58,7 +58,7 @@ async function main() {
 
   core.debug(JSON.stringify(entries, null, 2));
 
-  const { manifest } = entries;
+  const manifest = { entries };
   const req = {
     url: url.href,
     production: false,
