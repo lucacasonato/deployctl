@@ -1,4 +1,5 @@
 import * as core from "@actions/core";
+import * as github from "@actions/github";
 import "./shim.js";
 import { API, fromFileUrl, parseEntrypoint, resolve, walk } from "./deps.js";
 
@@ -60,6 +61,7 @@ async function main() {
     url: url.href,
     production: false,
     manifest,
+    event: github.context.payload,
   };
   const progress = api.pushDeploy(projectId, req, files);
   let deployment;

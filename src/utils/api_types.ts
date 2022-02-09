@@ -51,6 +51,7 @@ export interface PushDeploymentRequest {
   url: string;
   production: boolean;
   manifest?: { entries: Record<string, ManifestEntry> };
+  event?: any
 }
 
 export type DeploymentProgress =
