@@ -1,6 +1,9 @@
 # deployctl
 
-Command line tool for Deno Deploy.
+`deployctl` is the command line tool for Deno Deploy. This repository also
+contains the `denoland/deployctl` GitHub Action.
+
+> ⚠ [For more on the GitHub Action, go here](./action/README.md)
 
 ## Install
 
@@ -10,10 +13,13 @@ deno install --allow-read --allow-write --allow-env --allow-net --allow-run --no
 
 ## Usage
 
-Run a script:
+Before being able to deploy, you need to get a personal access token from the
+[Deno Deploy account page](https://dash.deno.com/account). Store this token in a
+`DENO_DEPLOY_TOKEN` environment variable, or pass it to `deployctl` with the
+`--token` flag.
 
 ```shell
-deployctl run ./examples/hello.js
+deployctl deploy --project=hello-world ./examples/hello.ts
 ```
 
 View the help:

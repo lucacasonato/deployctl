@@ -15,33 +15,29 @@ jobs:
       matrix:
         # Test on the oldest supported, the latest stable, and nightly
         deno: [old, stable, canary]
-        os: [macOS-latest, windows-latest, ubuntu-latest-xl]
+        os: [macOS-latest, windows-latest, ubuntu-20.04-xl]
 
     steps:
       - name: Setup repo
         uses: actions/checkout@v2
 
       - name: Setup Deno
-        run: |
-          curl -fsSL https://deno.land/x/install/install.sh | sh ${{ matrix.deno == 'old' && '-s v1.8.0' || '' }}
-          echo "$HOME/.deno/bin" >> $${{ runner.os == 'Windows' && 'env:' || '' }}GITHUB_PATH
-
-      - name: Upgrade to Deno canary
-        if: matrix.deno == 'canary'
-        run: deno upgrade --canary
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: ${{ matrix.deno == 'old' && '1.16.0' || (matrix.deno == 'stable' && '1.x' || matrix.deno) }}
 
       - run: deno --version
 
       - name: Format
-        if: runner.os == 'Linux'
+        if: runner.os == 'Linux' && matrix.deno == 'stable'
         run: deno fmt --check
 
       - name: Lint
-        if: runner.os == 'Linux'
-        run: deno lint --unstable
+        if: runner.os == 'Linux' && matrix.deno == 'stable'
+        run: deno lint
 
       - name: Typecheck
         run: deno cache deployctl.ts
 
       - name: Run tests
-        run: deno test -A --unstable
+        run: make test
